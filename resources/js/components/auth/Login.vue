@@ -48,6 +48,7 @@
         login(this.$data.form)
           .then((res) => {
             this.$store.commit("logginSuccess", res);
+
             this.$router.push({path: '/'});
           })
           .catch((error) => {
