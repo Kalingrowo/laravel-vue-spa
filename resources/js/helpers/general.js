@@ -1,5 +1,5 @@
 export function initialize(store, router) {
-  
+
   router.beforeEach((to, from, next) => {
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
     const currentUser = store.state.currentUser;
@@ -18,6 +18,8 @@ export function initialize(store, router) {
       store.commit('logout');
       router.push('/login');
     }
+
+    return Promise.reject(error);
   });
 
 }
