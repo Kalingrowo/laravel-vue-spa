@@ -62,6 +62,11 @@
         errors: null
       };
     },
+    computed: {
+      currentUser() {
+        return this.$store.getters.currentUser;
+      }
+    },
     methods: {
       add() {
         this.errors = null;
@@ -72,7 +77,17 @@
 
         if(errors) {
           this.errors = errors
+          return;
         }
+
+        axios.post('/api/customers/new', this.$data.customer, {
+          headers: {
+            "Authorization": 'Bearer '.concat(this.currentUser.token)
+          }
+        })
+        .then((response) => {
+          this.$router.push('/customers');
+        })
       },
       getConstrains() {
         return {

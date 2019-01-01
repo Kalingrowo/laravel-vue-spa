@@ -52,10 +52,10 @@ export default {
       context.commit("login");
     },
     getCustomers(context) {
-      console.log(context.state.currentUser)
+      const AuthStr = 'Bearer '.concat(context.state.currentUser.token);
       axios.get('/api/customers', {
         headers: {
-          "Authorization": 'Bearer ${context.state.currentUser.token}'
+          "Authorization": AuthStr
         }
       })
       .then((response) => {

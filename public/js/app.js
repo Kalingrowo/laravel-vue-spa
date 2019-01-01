@@ -2124,15 +2124,31 @@ __webpack_require__.r(__webpack_exports__);
       errors: null
     };
   },
+  computed: {
+    currentUser: function currentUser() {
+      return this.$store.getters.currentUser;
+    }
+  },
   methods: {
     add: function add() {
+      var _this = this;
+
       this.errors = null;
       var constraints = this.getConstrains();
       var errors = validate_js__WEBPACK_IMPORTED_MODULE_0___default()(this.$data.customer, constraints);
 
       if (errors) {
         this.errors = errors;
+        return;
       }
+
+      axios.post('/api/customers/new', this.$data.customer, {
+        headers: {
+          "Authorization": 'Bearer '.concat(this.currentUser.token)
+        }
+      }).then(function (response) {
+        _this.$router.push('/customers');
+      });
     },
     getConstrains: function getConstrains() {
       return {
@@ -55376,10 +55392,10 @@ var user = Object(_helpers_auth__WEBPACK_IMPORTED_MODULE_0__["getLocalUser"])();
       context.commit("login");
     },
     getCustomers: function getCustomers(context) {
-      console.log(context.state.currentUser);
+      var AuthStr = 'Bearer '.concat(context.state.currentUser.token);
       axios.get('/api/customers', {
         headers: {
-          "Authorization": 'Bearer ${context.state.currentUser.token}'
+          "Authorization": AuthStr
         }
       }).then(function (response) {
         context.commit('updateCustomers', response.data.customers);
